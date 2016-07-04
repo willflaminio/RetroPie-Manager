@@ -1,7 +1,7 @@
 # Retropie-Manager
 Recalbox-Manager fork for RetroPie 4.x
 
-![alt tag](https://github.com/botolo78/RetroPie-Manager/blob/master/project/webapp_statics/screenshot.png)
+![alt tag](https://github.com/botolo78/RetroPie-Manager/blob/retropie/screenshot.png)
 
 # About
 
