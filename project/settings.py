@@ -24,7 +24,7 @@ SITE_ID = 1
 # If not empty, use this instead of Site framework to know the name and use 
 # a trick to find the host ip
 SITE_FIXED = {
-    'name': "Recalbox Manager",
+    'name': "Retropie Manager",
     'ip': None, # If None find the ip automatically, else use a string to define another hostname
     'port': '8001', # If None no port is appended to hostname, so the server have to be reachable from port 80
 }
@@ -170,17 +170,25 @@ ASSETS_TAG_TEMPLATES = {
 #
 
 # Path to directory that contains bios file
-RECALBOX_BIOS_PATH = "/recalbox/share/bios"
+RECALBOX_BIOS_PATH = "/home/pi/RetroPie/BIOS"
 # Path to directory that contains system roms directories
-RECALBOX_ROMS_PATH = '/recalbox/share/roms'
+RECALBOX_ROMS_PATH = '/home/pi/RetroPie/roms'
 # Path to directory that contains system saves
-RECALBOX_SAVES_PATH = '/recalbox/share/saves'
-# Path to the Recalbox configuration file
-RECALBOX_CONF_PATH = '/recalbox/share/system/recalbox.conf'
-# Path to the Recalbox configuration backup file
-RECALBOX_CONF_BACKUP_PATH = '/recalbox/share/system/recalbox.old.conf'
+#RECALBOX_SAVES_PATH = '/home/pi/RetroPie/roms'
+# Path to the Retroarch configuration file
+RECALBOX_CONF_PATH = '/opt/retropie/configs/all/retroarch.cfg'
+# Path to the Retroarch configuration backup file
+RECALBOX_CONF_BACKUP_PATH = '/opt/retropie/configs/all/retroarch.cfg.bak'
+# Path to the ES configuration file
+ES_CONF_PATH = '/etc/emulationstation/es_systems.cfg'
+# Path to the ES configuration backup file
+ES_CONF_BACKUP_PATH = '/etc/emulationstation/es_systems.cfg.bak'
+# Path to autostart.sh
+AS_SCRIPT_PATH = '/opt/retropie/configs/all/autostart.sh'
+# Path autostart.sh backup file
+AS_SCRIPT_BACKUP_PATH = '/opt/retropie/configs/all/autostart.sh.bak'
 # Path to the Recalbox logs file
-RECALBOX_LOGFILE_PATH = "/recalbox/share/system/logs/recalbox.log"
+RECALBOX_LOGFILE_PATH = "/opt/retropie/configs/all/emulationstation/es_log.txt"
 # Path to the Recalbox manifest file (actually shipped into manager project)
 RECALBOX_MANIFEST_FILEPATH = os.path.join(PROJECT_DIR, 'MANIFEST.xml')
 

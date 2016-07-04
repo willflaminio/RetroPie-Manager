@@ -1,9 +1,37 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <systems>
+   <system key="amiga" name="Amiga">
+      <extensions>
+         <extension>adf</extension>
+         <extension>uae</extension>
+		 <extension>hdf</extension>
+		 <extension>lzx</extension>
+      </extensions>
+      <bios>
+		<file md5="192d6d950d0ed3df8040b788502831c2">kick13.rom</file>
+		<file md5="dc10d7bdd1b6f450773dfb558477c230">kick20.rom</file>
+        <file md5="e40a5dfb3d017ba8779faba30cbd1c8e">kick31.rom</file>
+      </bios>
+   </system>
+   <system key="amstradcpc" name="Amstrad CPC">
+      <extensions>
+         <extension>dsk</extension>
+         <extension>cpc</extension>
+      </extensions>
+      <download_links>
+         <link>http://www.planetemu.net/roms/atari-2600</link>
+      </download_links>
+   </system>
+   <system key="arcade" name="Arcade">
+      <extensions>
+         <extension>zip</extension>
+      </extensions>
+   </system>    
    <system key="atari2600" name="Atari 2600">
       <extensions>
          <extension>a26</extension>
          <extension>bin</extension>
+         <extension>zip</extension>
          <extension>zip</extension>
       </extensions>
       <download_links>
@@ -23,13 +51,17 @@
          <file md5="0763f1ffb006ddbe32e52d497ee848ae">7800 BIOS (U).rom</file>
       </bios>
    </system>
-   <system key="fba" name="FBA">
+   <system key="dreamcast" name="Dreamcast">
       <extensions>
-         <extension>fba</extension>
-         <extension>zip</extension>
+         <extension>cdi</extension>
+         <extension>gdi</extension>
       </extensions>
-   </system>
-   <system key="fba_libretro" name="FBA Libretro">
+      <bios>
+         <file md5="e10c53c2f8b90bab96ead2d368858623">dc_boot.bin</file>
+		 <file md5="74e3f69c2bb92bc1fc5d9a53dcf6ffe2">dc_flash.bin</file>
+      </bios>	  
+   </system>   
+   <system key="fba" name="FBA">
       <extensions>
          <extension>fba</extension>
          <extension>zip</extension>
@@ -88,6 +120,18 @@
          <link>http://www.planetemu.net/roms/nintendo-game-boy-color</link>
       </download_links>
    </system>
+   <system key="genesis" name="Genesis">
+      <extensions>
+         <extension>gen</extension>
+         <extension>md</extension>
+         <extension>smd</extension>
+         <extension>bin</extension>
+         <extension>zip</extension>
+      </extensions>
+      <download_links>
+         <link>http://www.planetemu.net/roms/sega-mega-drive</link>
+      </download_links>
+   </system>   
    <system key="gw" name="Game &amp; Watch">
       <extensions>
          <extension>mgw</extension>
@@ -97,21 +141,7 @@
          <link>http://bot.libretro.com/assets/cores/gw/</link>
       </download_links>
    </system>
-   <system key="lutro" name="LUA games">
-      <extensions>
-         <extension>lua</extension>
-         <extension>zip</extension>
-      </extensions>
-      <download_links>
-         <link>https://github.com/libretro/lutro-platformer</link>
-         <link>https://github.com/libretro/lutro-game-of-life</link>
-         <link>https://github.com/libretro/lutro-snake</link>
-         <link>https://github.com/libretro/lutro-tetris</link>
-         <link>https://github.com/libretro/lutro-iyfct</link>
-         <link>https://github.com/libretro/lutro-pong</link>
-      </download_links>
-   </system>
-   <system key="lynx" name="Lynx">
+   <system key="atarilynx" name="Lynx">
       <extensions>
          <extension>lnx</extension>
          <extension>zip</extension>
@@ -123,7 +153,12 @@
          <file md5="fcd403db69f54290b51035d82f835e7b">lynxboot.img</file>
       </bios>
    </system>
-   <system key="mame" name="Mame">
+   <system key="mame-libretro" name="Mame Libretro">
+      <extensions>
+         <extension>zip</extension>
+      </extensions>
+   </system>   
+   <system key="mame-mame4all" name="Mame 4 All">
       <extensions>
          <extension>zip</extension>
       </extensions>
@@ -218,6 +253,17 @@
          <link>http://www.planetemu.net/roms/snk-neo-geo-pocket-color</link>
       </download_links>
    </system>
+   <system key="ngpc" name="NeoGeo Pocket Color">
+      <extensions>
+         <extension>ngp</extension>
+         <extension>ngc</extension>
+         <extension>zip</extension>
+      </extensions>
+      <download_links>
+         <link>http://www.planetemu.net/roms/snk-neo-geo-pocket</link>
+         <link>http://www.planetemu.net/roms/snk-neo-geo-pocket-color</link>
+      </download_links>
+   </system>   
    <system key="pcengine" name="PC Engine">
       <extensions>
          <extension>pce</extension>
@@ -234,11 +280,13 @@
          <file md5="ff1a674273fe3540ccef576376407d1d">syscard3.pce</file>
       </bios>
    </system>
-   <system key="prboom" name="PRBoom">
+   <system key="psp" name="PSP">
       <extensions>
-         <extension>wad</extension>
+         <extension>cso</extension>
+         <extension>iso</extension>
+         <extension>pbp</extension>
       </extensions>
-   </system>
+   </system>   
    <system key="psx" name="PSX">
       <extensions>
          <extension>img</extension>
@@ -251,12 +299,6 @@
       <bios>
          <file md5="924e392ed05558ffdb115408c263dccf">SCPH1001.BIN</file>
       </bios>
-   </system>
-   <system key="scummvm" name="ScummVM">
-      <extensions />
-      <download_links>
-         <link>a26</link>
-      </download_links>
    </system>
    <system key="sega32x" name="Sega 32x">
       <extensions>
@@ -287,7 +329,7 @@
          <file md5="bdeb4c47da613946d422d97d98b21cda">jp_mcd1_9112.bin</file>
       </bios>
    </system>
-   <system key="sg1000" name="SG1000">
+   <system key="sg-1000" name="SG-1000">
       <extensions>
          <extension>sg</extension>
          <extension>zip</extension>
@@ -335,4 +377,20 @@
          <link>http://www.planetemu.net/roms/bandai-wonderswan-color</link>
       </download_links>
    </system>
+   <system key="zxspectrum" name="ZX Spectrum">
+      <extensions>
+         <extension>sna</extension>
+         <extension>szx</extension>
+         <extension>z80</extension>
+         <extension>tap</extension>
+         <extension>tzx</extension>
+         <extension>gz</extension>
+         <extension>udi</extension>
+         <extension>mgt</extension>
+         <extension>img</extension>	
+         <extension>trd</extension>
+         <extension>scl</extension>
+         <extension>dsk</extension>				 
+      </extensions>
+   </system>   
 </systems>

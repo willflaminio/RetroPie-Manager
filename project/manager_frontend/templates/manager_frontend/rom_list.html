@@ -75,7 +75,7 @@
     </div>
 </form>
 
-<form action="." method="post">
+<form action="{% url 'manager:roms-list' system=system %}" method="post">
     {% csrf_token %}
     {% if delete_form.roms.errors %}
     <div class="row">

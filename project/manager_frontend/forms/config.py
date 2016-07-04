@@ -19,7 +19,7 @@ class ConfigEditForm(CrispyFormMixin, forms.Form):
     #crispy_form_helper_path = 'project.manager_frontend.forms.crispies.config_helper'
     #crispy_form_helper_kwargs = {}
     
-    content = forms.CharField(label=_('Content'), widget=forms.Textarea(attrs={'rows': 50}), required=True)
+    content = forms.CharField(label=_('Content'), widget=forms.Textarea(attrs={'rows': 30}), required=True)
     backup = forms.BooleanField(label=_('Backup previous version before saving'), required=False)
     
     def __init__(self, *args, **kwargs):

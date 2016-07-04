@@ -3,6 +3,8 @@ from django.views.generic import TemplateView
 
 from .views import HomeView
 from .views.config import RecalboxConfigFormView
+from .views.configes import RecalboxConfigEsFormView
+from .views.configas import RecalboxConfigAsFormView
 from .views.logs import LogsView
 from .views.bios import BiosListView, BiosUploadJsonView
 from .views.roms import RomListView, RomUploadJsonView
@@ -17,6 +19,10 @@ urlpatterns = [
     url(r'^bios/upload$', BiosUploadJsonView.as_view(), name='bios-upload'),
     
     url(r'^config/$', RecalboxConfigFormView.as_view(), name='config'),
+	
+	url(r'^configes/$',  RecalboxConfigEsFormView.as_view(), name='configes'),
+	
+	url(r'^configas/$',  RecalboxConfigAsFormView.as_view(), name='configas'),
     
     url(r'^monitoring/$', MonitoringView.as_view(), name='monitoring'),
     
@@ -26,7 +32,8 @@ urlpatterns = [
     
     #url(r'^systems/roms/saves/$', SavesListView.as_view(), name='roms-saves-list'),
     
+    url(r'^systems/roms/(?P<system>[-\w]+)$', RomListView.as_view(), name='roms-list'),
     url(r'^systems/roms/(?P<system>\w+)/$', RomListView.as_view(), name='roms-list'),
-    url(r'^systems/roms/(?P<system>\w+)/upload/$', RomUploadJsonView.as_view(), name='roms-upload'),
+    url(r'^systems/roms/(?P<system>[-\w]+)/upload/$', RomUploadJsonView.as_view(), name='roms-upload'),
 
 ]
