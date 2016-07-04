@@ -196,7 +196,6 @@ RECALBOX_MANIFEST_FILEPATH = os.path.join(PROJECT_DIR, 'MANIFEST.xml')
 RECALBOX_SYSTEM_DEFAULT = {
     'name': 'Unknow',
     'extensions': [],
-    'download_links': [],
     'bios': [],
 }
 

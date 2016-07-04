@@ -17,11 +17,6 @@ class RecalboxManifestParser(object):
             return []
         return [item.text for item in node.find("extensions").findall("extension")]
     
-    def get_system_download_links(self, node):
-        if node.find("download_links") is None:
-            return []
-        return [item.text for item in node.find("download_links").findall("link")]
-    
     def get_system_bios(self, node):
         if node.find("bios") is None:
             return []
@@ -47,7 +42,6 @@ class RecalboxManifestParser(object):
             manifest[system_key] = {
                 'name': node.get('name'),
                 'extensions': self.get_system_extensions(node),
-                'download_links': self.get_system_download_links(node),
                 'bios': self.get_system_bios(node),
                 'extra_comments': self.get_system_extra_comments(node),
             }
