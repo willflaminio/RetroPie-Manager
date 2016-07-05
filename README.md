@@ -38,9 +38,6 @@ $ cd RetroPie-Manager
 $ make install
 ```
 
-Use **git clone -b dev https://github.com/botolo78/RetroPie-Manager.git** if you want to test the development branch.
-
-
 # Usage
 
 ```sh
