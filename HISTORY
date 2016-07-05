@@ -16,3 +16,4 @@
 1.1.1
 - No need to rename rom folders with dash ("-") in the name
 - Set path to the original es_system.cfg
+- Sortable tables in Bios and Roms view
