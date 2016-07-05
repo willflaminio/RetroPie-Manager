@@ -62,7 +62,7 @@ and add this command before **emulationstation #auto**
 
 # Update
 ```sh
-$ sudo kill -9 $(pgrep RetroPie-Manager)
+$ sudo kill -9 $(pgrep -f RetroPie-Manager)
 $ cd 
 $ cd Retropie-Manager
 $ make clean
@@ -73,7 +73,7 @@ $ make install
 
 # Reinstall
 ```sh
-$ sudo kill -9 $(pgrep RetroPie-Manager)
+$ sudo kill -9 $(pgrep -f RetroPie-Manager)
 $ cd 
 $ rm -rf Retropie-Manager
 $ git clone https://github.com/botolo78/RetroPie-Manager.git
@@ -83,7 +83,7 @@ $ make install
 # Stop RetroPie-Manager
 
 ```sh
-$ sudo kill -9 $(pgrep RetroPie-Manager)
+$ sudo kill -9 $(pgrep -f RetroPie-Manager)
 ```
 
 # Known bugs
