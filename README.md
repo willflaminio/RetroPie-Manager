@@ -23,7 +23,7 @@ With Retropie-Manager you can
 
 - In this release the virtual gamepad page has been removed.
 - It is tested in Raspberry Pi. Some users reported problems to install it on an ubuntu-based RetroPie installation (the ubuntu repositories don't have the virtualenv package).
-- It doesn't support subdirectories at ROMs dir (as reported [here](https://github.com/botolo78/RetroPie-Manager/issues/9))
+- It doesn't support subdirectories at ROMs dir (as reported [here](https://github.com/botolo78/RetroPie-Manager/issues/5))
 
 
 # Install
