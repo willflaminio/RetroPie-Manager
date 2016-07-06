@@ -5,7 +5,7 @@ Recalbox-Manager fork for RetroPie 4.x
 
 # About
 
-This is a very dirty Recalbox-Manager fork aimed to be used with RetroPie 4.x **running on Raspberry Pi**.
+This a Recalbox-Manager fork aimed to be used with RetroPie 4.x **running on Raspberry Pi**.
 
 Original repository: https://github.com/recalbox/recalbox-manager
 
