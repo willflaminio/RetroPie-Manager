@@ -28,20 +28,20 @@ With Retropie-Manager you can
 
 # Install
 ```sh
-$ sudo apt-get install virtualenv python-dev
+sudo apt-get install virtualenv python-dev
 ```
 
 ```sh
-$ cd
-$ git clone https://github.com/botolo78/RetroPie-Manager.git
-$ cd RetroPie-Manager
-$ make install
+cd
+git clone https://github.com/botolo78/RetroPie-Manager.git
+cd RetroPie-Manager
+make install
 ```
 
 # Usage
 
 ```sh
-$ /home/pi/RetroPie-Manager/bin/python /home/pi/RetroPie-Manager/manage.py runserver 0.0.0.0:8000 --settings=project.settings_production --noreload
+/home/pi/RetroPie-Manager/bin/python /home/pi/RetroPie-Manager/manage.py runserver 0.0.0.0:8000 --settings=project.settings_production --noreload
 ```
 Open your browser and go to **http://your_retropie_ip:8000/**
 
@@ -49,7 +49,7 @@ Open your browser and go to **http://your_retropie_ip:8000/**
 To make Retropie-Manager to start with your raspberry edit your autostart.sh
 
 ```sh
-$ sudo nano /opt/retropie/configs/all/autostart.sh
+sudo nano /opt/retropie/configs/all/autostart.sh
 ```
 and add this command before **emulationstation #auto**
 
@@ -59,28 +59,28 @@ and add this command before **emulationstation #auto**
 
 # Update
 ```sh
-$ sudo kill -9 $(pgrep -f RetroPie-Manager)
-$ cd 
-$ cd Retropie-Manager
-$ make clean
-$ git reset --hard HEAD
-$ git pull
-$ make install
+sudo kill -9 $(pgrep -f RetroPie-Manager)
+cd 
+cd Retropie-Manager
+make clean
+git reset --hard HEAD
+git pull
+make install
 ```
 
 # Reinstall
 ```sh
-$ sudo kill -9 $(pgrep -f RetroPie-Manager)
-$ cd 
-$ rm -rf Retropie-Manager
-$ git clone https://github.com/botolo78/RetroPie-Manager.git
-$ cd RetroPie-Manager
-$ make install
+sudo kill -9 $(pgrep -f RetroPie-Manager)
+cd 
+rm -rf Retropie-Manager
+git clone https://github.com/botolo78/RetroPie-Manager.git
+cd RetroPie-Manager
+make install
 ```
 # Stop RetroPie-Manager
 
 ```sh
-$ sudo kill -9 $(pgrep -f RetroPie-Manager)
+sudo kill -9 $(pgrep -f RetroPie-Manager)
 ```
 
 # Known bugs
