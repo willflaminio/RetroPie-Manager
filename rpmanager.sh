@@ -140,10 +140,7 @@ while [[ "$1" ]]; do
         fi
 
         log_dir="${rpmanager_dir}/logs"
-        [[ -d "$log_dir" ]] || {
-            echo "Error: unable to save log files at $log_dir" >&2
-            exit 1
-        }
+        mkdir -p "$log_dir"
         log_command="&> ${log_dir}/rpmanager-$(date +%Y-%m-%d-%H%M%S).log"
     ;;
 
