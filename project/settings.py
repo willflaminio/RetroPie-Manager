@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import getpass
 #from manager_frontend.utils.manifest import RecalboxManifestParser
 
 gettext = lambda s: s
@@ -169,10 +170,13 @@ ASSETS_TAG_TEMPLATES = {
 # Recalbox needed paths
 #
 
+username = getpass.getuser()
+# TODO add logic for when people run as root
+
 # Path to directory that contains bios file
-RECALBOX_BIOS_PATH = "/home/pi/RetroPie/BIOS"
+RECALBOX_BIOS_PATH = os.path.join('/home', username, 'RetroPie/BIOS')
 # Path to directory that contains system roms directories
-RECALBOX_ROMS_PATH = '/home/pi/RetroPie/roms'
+RECALBOX_ROMS_PATH = os.path.join('/home', username, 'RetroPie/roms')
 # Path to directory that contains system saves
 #RECALBOX_SAVES_PATH = '/home/pi/RetroPie/roms'
 # Path to the Retroarch configuration file
