@@ -2,15 +2,15 @@
 # rpmanager.sh
 ###############
 #
-# The RetroPie-Manager manager (don't laugh!).
+# The RetroPie-Manager's manager.
 #
 # This script is intended to use when RetroPie-Manager is installed via
 # retropie_setup.sh. It happens because of the hardcoded path in the 
 # rpmanager_dir variable.
 #
 # The RetroPie-Manager can not be started directly by the root user, but
-# if it's called by a "sudo environment", it's OK. The sudo user will
-# start the service.
+# but if you need it (on boot), use the --user option. If it's called in a
+# "sudo environment", it's OK. The sudo user will start the service.
 #
 # The default TCP port is 8000, but the user can define another port using
 # the --port or -p option (allowed ports are between 1024 and 65535, inclusive).
@@ -24,9 +24,10 @@
 # Execute it with --help to see the available options.
 #
 
+# global variables ##########################################################
 readonly rpmanager_dir="/opt/retropie/supplementary/retropie-manager"
 
-usage="$0 OPTIONS"
+usage="$(basename $0) OPTIONS"
 
 help_message="Usage: $usage
 
@@ -47,6 +48,9 @@ The OPTIONS are:
 -p|--port NUMBER    make RetroPie-Manager listen at port NUMBER (optional,
                     default: 8000, only works with --start)
 
+-u|--user USER      start RetroPie-Manager as USER (only available for
+                    privileged users, only works with --start)
+
 The --start and --stop options are, obviously, mutually exclusive. If the
 user uses both, only the first works."
 
@@ -55,6 +59,67 @@ port=8000
 
 # the default is not save log files
 log_command="&> /dev/null"
+
+# getting the caller username
+user="$SUDO_USER"
+[[ -z "$user" ]] && user=$(id -un)
+
+
+
+##############################################################################
+# Set the user that will start the RetroPie-Manager. Only privileged users
+# can use this function. The user MUST have a RetroPie directory tree in
+# its homedir.
+#
+# Globals:
+#   user
+# Arguments:
+#   $1  a valid RetroPie user name
+# Returns:
+#   0, if a the user is setted correctly
+#   non-zero, otherwise
+##############################################################################
+function set_user() {
+    if [[ $(id -u) -ne 0 ]]; then
+        echo "Error: only privileged users (ex.: root) can use --user option." >&2
+        return 1
+    fi
+
+    if [[ ! -d "/home/$1/RetroPie/" ]]; then
+        echo "Error: the user '$1' is not a RetroPie user." >&2
+        return 1
+    fi
+
+    user="$1"
+    return 0
+}
+
+
+##############################################################################
+# Set the listening TCP port. The valid ports to use are between
+# 1024 and 65535, inclusive.
+#
+# Globals:
+#   port
+# Arguments:
+#   $1  a TCP port number
+# Returns:
+#   0, if the port is correctly setted
+#   non-zero, otherwise
+##############################################################################
+function set_port() {
+    # checking if $1 is a number and is a valid non-privileged port
+    echo "$1" | grep '^[0-9]\{1,\}$' >/dev/null \
+    && [ $1 -ge 1024 -a $1 -le 65535 ] || {
+        echo "Error: invalid port number: $1" >&2
+        echo "The port must be a number between 1024 and 65535, inclusive" >&2
+        return 1
+    }
+
+    port="$1"
+    return 0
+}
+
 
 
 ##############################################################################
@@ -82,8 +147,8 @@ function is_running() {
     # ok... maybe there is a more elegant way to obtain the current
     # listening port, but let's use this way for a while.
     port=$(
-        ps x \
-        | grep -o 'python.*manage\.py.*runserver.*--noreload' \
+        ps ax \
+        | grep -m 1 -o 'python.*manage\.py.*runserver.*--noreload' \
         | grep -o '0.0.0.0:[^ ]*' \
         | cut -d: -f2
     )
@@ -98,6 +163,7 @@ function is_running() {
 #
 # Globals:
 #   log_command
+#   user
 # Arguments:
 #   None
 # Returns:
@@ -110,7 +176,6 @@ function start_service() {
         return 1
     fi
 
-    local user
     local startcmd="${rpmanager_dir}/bin/python \
                       ${rpmanager_dir}/manage.py \
                       runserver 0.0.0.0:$port \
@@ -119,17 +184,17 @@ function start_service() {
                       $log_command"
 
     # RetroPie-Manager should not be started directly by the root user,
-    # but we can deal if it's called by a "sudo environment".
+    # but we can deal if it's called by a "sudo environment" or with
+    # the --user option.
     if [[ $(id -u) -eq 0 ]]; then
-        user="$SUDO_USER"
-        [[ -z "$user" ]] && {
+        if [[ $(id -u "$user") -eq 0 ]]; then
             echo "Error: RetroPie-Manager can't be started directly by root!" >&2
-            exit 1
-        }
+            echo "Try to use '--user' option" >&2
+            return 1
+        fi
         startcmd="su -c '$startcmd' $user"
     fi
 
-    # TODO: check if the service really started
     echo "Starting RetroPie-Manager..."
     eval $startcmd &>/dev/null &
     sleep 3
@@ -165,6 +230,7 @@ function stop_service() {
             echo "Error: Unable to kill RetroPie-Manager process." >&2
             return 1
         else
+            echo "RetroPie-Manager has been stopped."
             return 0
         fi
     fi
@@ -174,14 +240,12 @@ function stop_service() {
 }
 
 
-##############################################################################
-# start point
-##############################################################################
+# starting point #############################################################
 
 # because of the hardcoded paths, it only works if installed
 # via retropie_setup.sh
 [[ -d "$rpmanager_dir" ]] || {
-    echo "Error: this script is intended to use when RetroPie-Manager is installed via retropie_setup.sh" >&2
+    echo "Error: $(basename $0) is made to use when RetroPie-Manager is installed via retropie_setup.sh" >&2
     exit 1
 }
 
@@ -253,15 +317,17 @@ while [[ "$1" ]]; do
         fi
 
         shift
-        port="$1"
+        set_port "$1" || exit $?
 
-        # checking if $port is a number and is a valid non-privileged port
-        echo "$port" | grep '^[0-9]\{1,\}$' >/dev/null &&
-          [ $port -ge 1024 -a $port -le 65535 ] || {
-            echo "Error: invalid port number: $port"
-            echo "The port must be a number between 1024 and 65535, inclusive" >&2
+    ;;
+
+    -u|--user)
+        if [[ "$f_start" = "0" ]]; then
+            echo "Error: the '--user' option is used with '--start' only" >&2
             exit 1
-        }
+        fi
+        shift
+        set_user "$1" || exit $?
     ;;
 
     *)  echo "Invalid option: $1" >&2
