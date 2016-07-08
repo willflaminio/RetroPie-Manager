@@ -2,13 +2,29 @@
 # rpmanager.sh
 ###############
 #
-# An easier way to manage the RetroPie-Manager.
+# The RetroPie-Manager manager (don't laugh!).
 #
 # This script is intended to use when RetroPie-Manager is installed via
-# retropie_setup. It happens because of the hardcoded path in the 
+# retropie_setup.sh. It happens because of the hardcoded path in the 
 # rpmanager_dir variable.
+#
+# The RetroPie-Manager can not be started directly by the root user, but
+# if it's called by a "sudo environment", it's OK. The sudo user will
+# start the service.
+#
+# The default TCP port is 8000, but the user can define another port using
+# the --port or -p option (allowed ports are between 1024 and 65535, inclusive).
+# This script doesn't allow to start multiple instances of RetroPie-Manager,
+# even if the user try to start it listening to a different port.
+#
+# If the --log option is used, the log messages will be saved in
+# "/opt/retropie/supplementary/retropie-manager/logs" ($rpmanager_dir/logs)
+# with an appropriate file name
+#
+# Execute it with --help to see the available options.
+#
 
-rpmanager_dir="/opt/retropie/supplementary/retropie-manager"
+readonly rpmanager_dir="/opt/retropie/supplementary/retropie-manager"
 
 usage="$0 OPTIONS"
 
@@ -17,17 +33,22 @@ help_message="Usage: $usage
 The OPTIONS are:
 
 -h|--help           print this message and exit
+
 --start             start the RetroPie-Manager
+
 --stop              stop the RetroPie-Manager
---isrunning         check if RetroPie-Manager is running and exit
+
+--isrunning         show if RetroPie-Manager is running and the
+                    listening port and exit
+
 --log               save the log messages (optional, default: not save log
                     messages, only works with --start)
+
 -p|--port NUMBER    make RetroPie-Manager listen at port NUMBER (optional,
                     default: 8000, only works with --start)
 
 The --start and --stop options are, obviously, mutually exclusive. If the
-user uses both, only the first works.
-"
+user uses both, only the first works."
 
 # default TCP port to listen
 port=8000
@@ -36,38 +57,120 @@ port=8000
 log_command="&> /dev/null"
 
 
-function is_running() {
+##############################################################################
+# Check if RetroPie-Manager is running. If positive, fill the $port global
+# variable with current listening port.
+#
+# Globals:
+#   port
+# Arguments:
+#   None
+# Returns:
+#   0, if RetroPie-Manager is running
+#   non-zero, otherwise
+##############################################################################
+function is_running() { 
+    local return_value
+
     pgrep -f 'python.*manage\.py.*runserver' &>/dev/null
-    return $?
+    return_value=$?
+
+    if [[ "$return_value" != "0" ]]; then
+        return $return_value
+    fi
+
+    # ok... maybe there is a more elegant way to obtain the current
+    # listening port, but let's use this way for a while.
+    port=$(
+        ps x \
+        | grep -o 'python.*manage\.py.*runserver.*--noreload' \
+        | grep -o '0.0.0.0:[^ ]*' \
+        | cut -d: -f2
+    )
+    return $return_value
 }
 
 
+##############################################################################
+# Starts the RetroPie-Manager service. It gives an error if it's called
+# directly by the root user, but if it's called by an "sudo environment",
+# RetroPie-Manager is started by the sudo user.
+#
+# Globals:
+#   log_command
+# Arguments:
+#   None
+# Returns:
+#   1, if it's unable to start RetroPie-Manager
+#   0, if RetroPie-Manager is successfully started
+##############################################################################
 function start_service() {
     if is_running; then
-        echo "Nothing done. RetroPie-Manager is already running." >&2
+        echo "Nothing done. RetroPie-Manager is already running and listening at $port." >&2
         return 1
     fi
 
-startcmd="${rpmanager_dir}/bin/python \
-            ${rpmanager_dir}/manage.py \
-            runserver 0.0.0.0:$port \
-            --settings=project.settings_production \
-            --noreload \
-            $log_command"
+    local user
+    local startcmd="${rpmanager_dir}/bin/python \
+                      ${rpmanager_dir}/manage.py \
+                      runserver 0.0.0.0:$port \
+                      --settings=project.settings_production \
+                      --noreload \
+                      $log_command"
+
+    # RetroPie-Manager should not be started directly by the root user,
+    # but we can deal if it's called by a "sudo environment".
+    if [[ $(id -u) -eq 0 ]]; then
+        user="$SUDO_USER"
+        [[ -z "$user" ]] && {
+            echo "Error: RetroPie-Manager can't be started directly by root!" >&2
+            exit 1
+        }
+        startcmd="su -c '$startcmd' $user"
+    fi
 
     # TODO: check if the service really started
+    echo "Starting RetroPie-Manager..."
     eval $startcmd &>/dev/null &
+    sleep 3
+    if is_running; then
+        echo "RetroPie-Manager is running and listening at port $port"
+        return 0
+    else
+        echo "Error: It seems that RetroPie-Manager had some problem to start!" >&2
+        echo "If you used the '--log' option, maybe the log can help in the diagnosis" >&2
+        return 1
+    fi
 }
 
 
+##############################################################################
+# Stops the RetroPie-Manager service if it's running.
+#
+# Globals:
+#   None
+# Arguments:
+#   None
+# Returns:
+#   0, if RetroPie-Manager process is successfully killed
+#   1, if unable to kill RetroPie-Manager
+#   2, if RetroPie-Manager wasn't running from the start
+##############################################################################
 function stop_service() {
     if is_running; then
+        echo "Stopping RetroPie-Manager..."
         sudo kill -9 $(pgrep -f 'python.*manage\.py.*runserver')
-        return 0
+        sleep 1
+        if is_running; then
+            echo "Error: Unable to kill RetroPie-Manager process." >&2
+            return 1
+        else
+            return 0
+        fi
     fi
 
     echo "Nothing done. RetroPie-Manager wasn't running." >&2
-    return 1
+    return 2
 }
 
 
@@ -104,9 +207,8 @@ while [[ "$1" ]]; do
     ;;
 
     --isrunning)
-        # TODO: provide more information, example: the port number
         if is_running; then
-            echo "RetroPie-Manager is running"
+            echo "RetroPie-Manager is running and listening at port $port"
             exit 0
         else
             echo "RetroPie-Manager is not running"
@@ -155,7 +257,7 @@ while [[ "$1" ]]; do
 
         # checking if $port is a number and is a valid non-privileged port
         echo "$port" | grep '^[0-9]\{1,\}$' >/dev/null &&
-          [ $port -ge 1024 -a $port -lt 65535 ] || {
+          [ $port -ge 1024 -a $port -le 65535 ] || {
             echo "Error: invalid port number: $port"
             echo "The port must be a number between 1024 and 65535, inclusive" >&2
             exit 1
@@ -173,11 +275,10 @@ done
 
 [[ "$f_start" = "1" ]] && {
     start_service
-    # TODO: exit with 0 only if the service really started
-    exit
+    exit $?
 }
 
 [[ "$f_stop" = "1" ]] && {
     stop_service
-    exit
+    exit $?
 }
