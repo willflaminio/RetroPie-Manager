@@ -40,10 +40,50 @@ make install
 
 # Usage
 
+You must be at the RetroPie-Manager's directory to use the `rpmanager.sh` like in the examples below.
+
+**Start**
 ```sh
-/home/pi/RetroPie-Manager/bin/python /home/pi/RetroPie-Manager/manage.py runserver 0.0.0.0:8000 --settings=project.settings_production --noreload
+./rpmanager.sh --start
 ```
 Open your browser and go to **http://your_retropie_ip:8000/**
+
+**Stop**
+```sh
+./rpmanager.sh --stop
+```
+
+**RetroPie-Manager can do more**
+```sh
+[prompt]$ ./rpmanager.sh --help
+Usage: rpmanager.sh OPTIONS
+
+The OPTIONS are:
+
+-h|--help           print this message and exit
+
+--start             start the RetroPie-Manager
+
+--stop              stop the RetroPie-Manager
+
+--isrunning         show if RetroPie-Manager is running and the
+                    listening port and exit
+
+--log               save the log messages (optional, default: not save log
+                    messages, only works with --start)
+
+-p|--port NUMBER    make RetroPie-Manager listen at port NUMBER (optional,
+                    default: 8000, only works with --start)
+
+-u|--user USER      start RetroPie-Manager as USER (only available for
+                    privileged users, only works with --start, USER must 
+                    be a RetroPie user)
+
+The --start and --stop options are, obviously, mutually exclusive. If the
+user uses both, only the first works.
+
+```
+
 
 # Autostart
 To make Retropie-Manager to start with your raspberry edit your autostart.sh
@@ -51,10 +91,10 @@ To make Retropie-Manager to start with your raspberry edit your autostart.sh
 ```sh
 sudo nano /opt/retropie/configs/all/autostart.sh
 ```
-and add this command before **emulationstation #auto**
+and add this command before **emulationstation #auto** [replace `/PATH/TO/` with the RetroPie-Manager's full path, and `RETROPIE_USER` with the RetroPie username, it's usually `pi` on a Raspberry Pi.]
 
 ```sh
-/home/pi/RetroPie-Manager/bin/python /home/pi/RetroPie-Manager/manage.py runserver 0.0.0.0:8000 --settings=project.settings_production --noreload > /dev/null 2>&1 &
+/PATH/TO/RetroPie-Manager/rpmanager.sh --start --user RETROPIE_USER 2>&1 &
 ```
 
 # Update
@@ -76,11 +116,6 @@ rm -rf Retropie-Manager
 git clone https://github.com/botolo78/RetroPie-Manager.git
 cd RetroPie-Manager
 make install
-```
-# Stop RetroPie-Manager
-
-```sh
-sudo kill -9 $(pgrep -f RetroPie-Manager)
 ```
 
 # Known bugs
