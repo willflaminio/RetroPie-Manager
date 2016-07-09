@@ -4,13 +4,16 @@
 #
 # The RetroPie-Manager's manager.
 #
-# This script is intended to use when RetroPie-Manager is installed via
-# retropie_setup.sh. It happens because of the hardcoded path in the 
-# rpmanager_dir variable.
+# This script MUST be in the same directory RetroPie-Manager's directory.
+# If it's installed in "/opt/retropie/supplementary/retropie-manager/",
+# and only in this case, the user can make symbolic links to it. Otherwise,
+# the symbolic links won't work.
 #
 # The RetroPie-Manager can not be started directly by the root user, but
-# but if you need it (on boot), use the --user option. If it's called in a
-# "sudo environment", it's OK. The sudo user will start the service.
+# but if you need it (ex.: on boot), use the --user option. The user must
+# be a RetroPie user (must have a RetroPie directory tree in its homedir).
+# If it's called in a "sudo environment", it's OK, the sudo user will start
+# the service.
 #
 # The default TCP port is 8000, but the user can define another port using
 # the --port or -p option (allowed ports are between 1024 and 65535, inclusive).
@@ -25,7 +28,8 @@
 #
 
 # global variables ##########################################################
-readonly rpmanager_dir="/opt/retropie/supplementary/retropie-manager"
+
+rpmanager_dir=$(dirname $0)
 
 usage="$(basename $0) OPTIONS"
 
@@ -49,7 +53,8 @@ The OPTIONS are:
                     default: 8000, only works with --start)
 
 -u|--user USER      start RetroPie-Manager as USER (only available for
-                    privileged users, only works with --start)
+                    privileged users, only works with --start, USER must 
+                    be a RetroPie user)
 
 The --start and --stop options are, obviously, mutually exclusive. If the
 user uses both, only the first works."
@@ -203,7 +208,6 @@ function start_service() {
         return 0
     else
         echo "Error: It seems that RetroPie-Manager had some problem to start!" >&2
-        echo "If you used the '--log' option, maybe the log can help in the diagnosis" >&2
         return 1
     fi
 }
@@ -242,19 +246,21 @@ function stop_service() {
 
 # starting point #############################################################
 
-# because of the hardcoded paths, it only works if installed
-# via retropie_setup.sh
-[[ -d "$rpmanager_dir" ]] || {
-    echo "Error: $(basename $0) is made to use when RetroPie-Manager is installed via retropie_setup.sh" >&2
-    exit 1
-}
+# OBS.: the double [[ ]] test style doesn't work with '-a' or '-o' option.
+if [ ! -x "$rpmanager_dir/bin/python" -a -f "$rpmanager_dir/manage.py" ]; then
+    rpmanager_dir="/opt/retropie/supplementary/retropie-manager"
+    if [[ ! -d "$rpmanager_dir" ]]; then
+        echo "Error: $(basename $0) MUST be in the RetroPie-Manager's directory" >&2
+        exit 1
+    fi
+fi
 
 
-[[ "$1" ]] || {
-    echo -e "\nError: missing arguments\n" >&2
+if [[ -z "$1" ]]; then
+    echo "Error: missing arguments" >&2
     echo "$help_message" >&2
     exit 1
-}
+fi
 
 
 # the following variables work like flags. they are used to deal with 
@@ -304,7 +310,6 @@ while [[ "$1" ]]; do
             shift
             continue
         fi
-
         log_dir="${rpmanager_dir}/logs"
         mkdir -p "$log_dir"
         log_command="&> ${log_dir}/rpmanager-$(date +%Y-%m-%d-%H%M%S).log"
@@ -315,10 +320,8 @@ while [[ "$1" ]]; do
             echo "Error: the '--port' option is used with '--start' only" >&2
             exit 1
         fi
-
         shift
         set_port "$1" || exit $?
-
     ;;
 
     -u|--user)
