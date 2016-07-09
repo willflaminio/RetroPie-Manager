@@ -72,9 +72,6 @@ The OPTIONS are:
 --log               save the log messages (optional, default: not save log
                     messages, only works with --start)
 
--p|--port NUMBER    make RetroPie-Manager listen at port NUMBER (optional,
-                    default: 8000, only works with --start)
-
 -u|--user USER      start RetroPie-Manager as USER (only available for
                     privileged users, only works with --start, USER must 
                     be a RetroPie user)
