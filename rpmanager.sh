@@ -247,7 +247,7 @@ function stop_service() {
 # starting point #############################################################
 
 # OBS.: the double [[ ]] test style doesn't work with '-a' or '-o' option.
-if [ ! -x "$rpmanager_dir/bin/python" -a -f "$rpmanager_dir/manage.py" ]; then
+if [ ! -x "$rpmanager_dir/bin/python" -a ! -f "$rpmanager_dir/manage.py" ]; then
     rpmanager_dir="/opt/retropie/supplementary/retropie-manager"
     if [[ ! -d "$rpmanager_dir" ]]; then
         echo "Error: $(basename $0) MUST be in the RetroPie-Manager's directory" >&2
