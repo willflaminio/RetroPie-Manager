@@ -15,11 +15,6 @@
 # If it's called in a "sudo environment", it's OK, the sudo user will start
 # the service.
 #
-# The default TCP port is 8000, but the user can define another port using
-# the --port or -p option (allowed ports are between 1024 and 65535, inclusive).
-# This script doesn't allow to start multiple instances of RetroPie-Manager,
-# even if the user try to start it listening to a different port.
-#
 # If the --log option is used, the log messages will be saved in
 # "/opt/retropie/supplementary/retropie-manager/logs" ($rpmanager_dir/logs)
 # with an appropriate file name
@@ -48,9 +43,6 @@ The OPTIONS are:
 
 --log               save the log messages (optional, default: not save log
                     messages, only works with --start)
-
--p|--port NUMBER    make RetroPie-Manager listen at port NUMBER (optional,
-                    default: 8000, only works with --start)
 
 -u|--user USER      start RetroPie-Manager as USER (only available for
                     privileged users, only works with --start, USER must 
@@ -98,33 +90,6 @@ function set_user() {
     user="$1"
     return 0
 }
-
-
-##############################################################################
-# Set the listening TCP port. The valid ports to use are between
-# 1024 and 65535, inclusive.
-#
-# Globals:
-#   port
-# Arguments:
-#   $1  a TCP port number
-# Returns:
-#   0, if the port is correctly setted
-#   non-zero, otherwise
-##############################################################################
-function set_port() {
-    # checking if $1 is a number and is a valid non-privileged port
-    echo "$1" | grep '^[0-9]\{1,\}$' >/dev/null \
-    && [ $1 -ge 1024 -a $1 -le 65535 ] || {
-        echo "Error: invalid port number: $1" >&2
-        echo "The port must be a number between 1024 and 65535, inclusive" >&2
-        return 1
-    }
-
-    port="$1"
-    return 0
-}
-
 
 
 ##############################################################################
@@ -313,15 +278,6 @@ while [[ "$1" ]]; do
         log_dir="${rpmanager_dir}/logs"
         mkdir -p "$log_dir"
         log_command="&> ${log_dir}/rpmanager-$(date +%Y-%m-%d-%H%M%S).log"
-    ;;
-
-    -p|--port)
-        if [[ "$f_start" = "0" ]]; then
-            echo "Error: the '--port' option is used with '--start' only" >&2
-            exit 1
-        fi
-        shift
-        set_port "$1" || exit $?
     ;;
 
     -u|--user)
