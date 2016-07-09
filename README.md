@@ -53,7 +53,7 @@ Open your browser and go to **http://your_retropie_ip:8000/**
 ./rpmanager.sh --stop
 ```
 
-**RetroPie-Manager can do more**
+**More options**
 ```sh
 [prompt]$ ./rpmanager.sh --help
 Usage: rpmanager.sh OPTIONS
