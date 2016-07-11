@@ -8273,9 +8273,6 @@ p > button {
   padding-bottom: 1rem;
 }
 
-.icon-retropie:before {
-  content: "\e603";
-}
 /*
  * 
  * HERE GOES THE ICONS FROM THE style.css bundled in the icomoon archive

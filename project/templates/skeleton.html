@@ -6,13 +6,10 @@
     <title>{% block head_title %}{{ SITE.name }}{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/x-icon" href="{{ STATIC_URL }}images/theme/favicon.ico">
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/recalbox.min.css">
     {% block header_content %}{% spaceless %}
         {% block head_metas %}
             <meta name="robots" content="index,follow,all">
-        {% endblock %}
-
-        {% block page_base_links %}
-            {% stylesheet_tag "css/app.min.css" %}
         {% endblock %}
         
         {% block page_more_links %}{% endblock %}
@@ -36,7 +33,7 @@
                 <li class="name">
                     <p class="title-1">
                         <a href="//{{ SITE.domain }}" title="{{ SITE.name }}" class="logo">
-                            <i class="icon-retropie"></i>
+                           <img src="{{ STATIC_URL }}images/theme/logo.png" alt="Retropie Logo" />
                         </a>
                     </p>
                 </li>
