@@ -6078,7 +6078,8 @@ html.no-flexbox .top-bar .flex-grid {
   color: #ffffff;
   display: block;
   font-weight: normal;
-  padding: 0 1.66667rem;
+  /*padding: 0 1.66667rem;*/
+  padding: 0 0 0 1.66667rem;
   width: 75%;
 }
 /* line 230, ../../../foundation5/bower_components/foundation/scss/foundation/components/_top-bar.scss */
