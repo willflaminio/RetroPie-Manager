@@ -11,7 +11,7 @@ Original repository: https://github.com/recalbox/recalbox-manager
 
 # Features
 With Retropie-Manager you can
-- Monitor the raspberry health and disk space
+- Monitor the system health and disk space
 - Edit the Emulation Station config file
 - Edit the RetroArch config file
 - Edit the autostart.sh script
