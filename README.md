@@ -5,7 +5,7 @@ Recalbox-Manager fork for RetroPie 4.x
 
 # About
 
-This a Recalbox-Manager fork aimed to be used with RetroPie 4.x **running on Raspberry Pi**.
+This a Recalbox-Manager fork aimed to be used with RetroPie 4.x.
 
 Original repository: https://github.com/recalbox/recalbox-manager
 
@@ -22,15 +22,24 @@ With Retropie-Manager you can
 # Limitations
 
 - In this release the virtual gamepad page has been removed.
-- It is tested in Raspberry Pi. Some users reported problems to install it on an ubuntu-based RetroPie installation (the ubuntu repositories don't have the virtualenv package).
 - It doesn't support subdirectories at ROMs dir (as reported [here](https://github.com/botolo78/RetroPie-Manager/issues/5))
 
 
 # Install
+
+**Dependencies on Raspberry Pi**
+
 ```sh
 sudo apt-get install virtualenv python-dev
 ```
 
+**Dependencies on Ubuntu-based Linux distribution**
+
+```sh
+sudo apt-get install python-virtualenv python-dev
+```
+
+**Installing RetroPie-Manager**
 ```sh
 cd
 git clone https://github.com/botolo78/RetroPie-Manager.git
