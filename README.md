@@ -97,10 +97,10 @@ To make Retropie-Manager to start with your raspberry edit your autostart.sh
 ```sh
 sudo nano /opt/retropie/configs/all/autostart.sh
 ```
-and add this command before **emulationstation #auto** [replace `/PATH/TO/` with the RetroPie-Manager's full path, and `RETROPIE_USER` with the RetroPie username, it's usually `pi` on a Raspberry Pi.]
+and add this command before **emulationstation #auto** [replace `/PATH/TO/` with the RetroPie-Manager's full path.]
 
 ```sh
-/PATH/TO/RetroPie-Manager/rpmanager.sh --start --user RETROPIE_USER 2>&1 &
+/PATH/TO/RetroPie-Manager/rpmanager.sh --start 2>&1 &
 ```
 
 # Update
