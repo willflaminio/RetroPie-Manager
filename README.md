@@ -27,6 +27,12 @@ With Retropie-Manager you can
 
 # Install
 
+## RetroPie-Setup script
+
+Execute the RetroPie-Setup, choose "Manage packages" -> "Manage experimental packages" -> "retropie-manager".
+
+## Old Method
+
 **Dependencies on Raspberry Pi**
 
 ```sh
