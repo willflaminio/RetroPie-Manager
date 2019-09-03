@@ -1,3 +1,5 @@
+# WARNING: THIS PROJECT IS NOT MAINTAINED ANYMORE. Feel free to fork and work on it.
+
 # Retropie-Manager
 Recalbox-Manager fork for RetroPie 4.x
 

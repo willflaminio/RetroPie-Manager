@@ -388,6 +388,7 @@
          <extension>img</extension>
          <extension>bin</extension>
          <extension>iso</extension>
+         <extension>cue</extension>
       </extensions>
       <bios>
          <file md5="924e392ed05558ffdb115408c263dccf">SCPH1001.BIN</file>
